@@ -132,6 +132,7 @@
     textarea {
       width: 100%;
       min-height: 360px;
+      display: none;
       resize: vertical;
       border-radius: 16px;
       padding: 16px;
@@ -266,6 +267,8 @@
 
     .sources a:hover { text-decoration: underline; }
 
+    .hidden { display:none !important; }
+
     .small {
       color: var(--muted);
       font-size: 13px;
@@ -282,16 +285,12 @@
 <body>
   <div class="wrap">
     <section class="hero">
-      <div class="badge">🕵️ Tradutor crítico de políticas · inspirado em Shoshana Zuboff</div>
-      <h1>Termos de uso, agora em português sincero</h1>
-      <p class="subtitle">
-        Clique numa plataforma para carregar trechos estáticos baseados em documentos oficiais. Depois o sistema traduz o juridiquês para uma leitura crítica — com humor, mas sem perder o ponto: coleta, perfilização, recomendação, publicidade e modulação de comportamento.
-      </p>
+      <h1>Tradutor</h1>
     </section>
 
     <section class="grid">
       <div class="card">
-        <div class="card-head"><h2>1. Escolha uma plataforma</h2></div>
+        <div class="card-head"><h2>Escolha uma plataforma</h2></div>
         <div class="card-body">
           <div class="platforms" id="platformButtons"></div>
           <textarea id="entrada" spellcheck="false"></textarea>
@@ -299,14 +298,12 @@
             <button class="btn btn-primary" id="translateBtn">Traduzir sem anestesia</button>
             <button class="btn btn-secondary" id="resetBtn">Limpar</button>
           </div>
-          <div class="small">
-            Observação: os textos abaixo são trechos estáticos selecionados e resumidos a partir de políticas, avisos de privacidade e páginas oficiais sobre personalização/recomendação. A ideia é demonstrar o mecanismo, não reproduzir o documento inteiro.
-          </div>
+          
         </div>
       </div>
 
       <div class="card">
-        <div class="card-head"><h3>2. Laudo do detetive do capitalismo de vigilância</h3></div>
+        <div class="card-head"><h3>Resultado</h3></div>
         <div class="card-body">
           <div class="meta-line">
             <div class="pill" id="platformPill">Nenhuma plataforma carregada</div>
@@ -556,9 +553,10 @@ Humor com nota fiscal: aqui o algoritmo não quer apenas entender você. Quer te
     function carregar(key) {
       plataformaAtual = key;
       const p = plataformas[key];
+      entrada.style.display = 'block';
       entrada.value = p.texto;
       platformPill.textContent = `Plataforma: ${p.nome}`;
-      statusPill.textContent = 'Trecho oficial estático carregado';
+      statusPill.textContent = 'Pronto para analisar';
       document.querySelectorAll('.platform-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.key === key);
       });
@@ -630,14 +628,14 @@ Humor com nota fiscal: aqui o algoritmo não quer apenas entender você. Quer te
     document.getElementById('resetBtn').addEventListener('click', () => {
       plataformaAtual = null;
       entrada.value = '';
+      entrada.style.display = 'none';
       platformPill.textContent = 'Nenhuma plataforma carregada';
-      statusPill.textContent = 'Aguardando análise';
+      statusPill.textContent = 'Aguardando clique';
       document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
       traduzir();
     });
 
     renderButtons();
-    carregar('google');
   </script>
 </body>
 </html>
