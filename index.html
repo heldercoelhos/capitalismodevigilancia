@@ -3,643 +3,1125 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tradutor de Termos de Uso — Capitalismo de Vigilância</title>
+  <title>Detetive da Aprendizagem</title>
   <style>
-    :root {
-      --bg: #0b1020;
-      --card: #131a2e;
-      --card-2: #0f1527;
-      --text: #edf2ff;
-      --muted: #aab4d0;
-      --accent: #8b5cf6;
-      --accent-2: #22c55e;
-      --warn: #f59e0b;
-      --danger: #ef4444;
-      --border: rgba(255,255,255,.08);
-      --shadow: 0 18px 40px rgba(0,0,0,.28);
-      --radius: 20px;
-    }
-
-    * { box-sizing: border-box; }
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(139,92,246,.18), transparent 32%),
-        radial-gradient(circle at top right, rgba(34,197,94,.12), transparent 22%),
-        linear-gradient(180deg, #0a0f1e 0%, #0c1222 100%);
-      color: var(--text);
-      min-height: 100vh;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-    .wrap {
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #273b58, #111827 70%);
+      color: #f8fafc;
+      padding: 20px;
+    }
+
+    .game {
       max-width: 1180px;
       margin: 0 auto;
-      padding: 32px 20px 56px;
-    }
-
-    .hero {
-      display: grid;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .badge {
-      display: inline-flex;
-      width: fit-content;
-      gap: 8px;
-      align-items: center;
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2rem, 5vw, 3.6rem);
-      line-height: 1.02;
-      letter-spacing: -0.04em;
-    }
-
-    .subtitle {
-      color: var(--muted);
-      font-size: 1.02rem;
-      max-width: 850px;
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 420px 1fr;
-      gap: 20px;
-      align-items: start;
-    }
-
-    .card {
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      background: rgba(15, 23, 42, 0.96);
+      border: 2px solid rgba(148, 163, 184, 0.35);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
       overflow: hidden;
     }
 
-    .card-head {
-      padding: 18px 20px 10px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,.02);
+    header {
+      padding: 26px;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+      text-align: center;
     }
 
-    .card-head h2, .card-head h3 {
-      margin: 0;
-      font-size: 1.02rem;
+    header h1 {
+      font-size: 34px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      color: #fde68a;
     }
 
-    .card-body { padding: 18px 20px 20px; }
+    header p {
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
 
-    .platforms {
+    .screen {
+      padding: 26px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .card,
+    .panel,
+    .result-card {
+      background: #111827;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+    }
+
+    h2 {
+      color: #fde68a;
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      color: #93c5fd;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #d1d5db;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .mission-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 18px 0;
     }
 
-    .platform-btn {
-      border: 1px solid var(--border);
-      background: var(--card-2);
-      color: var(--text);
-      padding: 14px 14px;
-      border-radius: 16px;
-      text-align: left;
-      cursor: pointer;
-      transition: .18s ease;
-      min-height: 88px;
-    }
-
-    .platform-btn:hover, .platform-btn.active {
-      transform: translateY(-1px);
-      border-color: rgba(139,92,246,.6);
-      box-shadow: 0 0 0 1px rgba(139,92,246,.28) inset;
-      background: linear-gradient(180deg, rgba(139,92,246,.14), rgba(139,92,246,.06));
-    }
-
-    .platform-name { font-weight: 700; display: block; margin-bottom: 6px; }
-    .platform-meta { color: var(--muted); font-size: 13px; line-height: 1.35; }
-
-    textarea {
-      width: 100%;
-      min-height: 360px;
-      display: none;
-      resize: vertical;
+    .mission-item {
+      background: #1f2937;
+      border: 1px solid rgba(148, 163, 184, 0.25);
       border-radius: 16px;
       padding: 16px;
-      border: 1px solid var(--border);
-      background: #0a1020;
-      color: var(--text);
-      font: 14px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      outline: none;
+      line-height: 1.45;
+      color: #e5e7eb;
     }
 
-    textarea:focus {
-      border-color: rgba(139,92,246,.7);
-      box-shadow: 0 0 0 3px rgba(139,92,246,.12);
+    .mission-item strong {
+      display: block;
+      color: #93c5fd;
+      margin-bottom: 6px;
     }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .btn {
-      border: 0;
+    .rules {
+      background: #0b1220;
+      border-left: 5px solid #f59e0b;
       border-radius: 14px;
-      cursor: pointer;
-      padding: 12px 16px;
-      font-weight: 700;
-      color: white;
-      transition: .18s ease;
+      padding: 16px;
+      margin-top: 16px;
+      color: #e5e7eb;
+      line-height: 1.5;
     }
 
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary { background: linear-gradient(135deg, var(--accent), #6d28d9); }
-    .btn-secondary { background: #1f2937; border: 1px solid var(--border); }
+    .status-bar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
 
-    .meta-line {
+    .status-box {
+      background: #0b1220;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .status-box span {
+      display: block;
+      color: #94a3b8;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .status-box strong {
+      color: #f8fafc;
+      font-size: 22px;
+    }
+
+    .status-box .good {
+      color: #86efac;
+    }
+
+    .status-box .bad {
+      color: #fca5a5;
+    }
+
+    .case-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      margin: 0 0 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      background: #1e3a8a;
+      color: #bfdbfe;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .activity-box {
+      margin: 14px 0 20px;
+      background: #1f2937;
+      border-left: 5px solid #f59e0b;
+      padding: 16px;
+      border-radius: 14px;
+      color: #e5e7eb;
+      line-height: 1.5;
+    }
+
+    .suspects-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .suspect-card {
+      background: #0b1220;
+      border: 2px solid rgba(148, 163, 184, 0.3);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 330px;
+      position: relative;
+    }
+
+    .suspect-card.correct {
+      border-color: #34d399;
+      background: #052e24;
+    }
+
+    .suspect-card.locked {
+      opacity: 0.75;
+    }
+
+    .student-top {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #1f2937;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      flex-shrink: 0;
+    }
+
+    .student-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #f8fafc;
+    }
+
+    .student-detail {
+      color: #cbd5e1;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .clue-box {
+      background: #1f2937;
+      border-left: 5px solid #93c5fd;
+      border-radius: 12px;
+      padding: 12px;
+      color: #dbeafe;
+      line-height: 1.45;
+      font-size: 14px;
+      min-height: 82px;
+    }
+
+    .clue-box.empty {
+      color: #94a3b8;
+      border-left-color: #64748b;
+    }
+
+    .decision-label {
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.35;
+      margin-top: auto;
+    }
+
+    .decision-label.correct {
+      background: #064e3b;
+      color: #bbf7d0;
+    }
+
+    .card-buttons {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .primary {
+      background: #f59e0b;
+      color: #111827;
+    }
+
+    .secondary {
+      background: #334155;
+      color: #f8fafc;
+    }
+
+    .danger {
+      background: #dc2626;
+      color: white;
+    }
+
+    .info {
+      background: #2563eb;
+      color: white;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
       flex-wrap: wrap;
     }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 7px 12px;
-      color: var(--muted);
-      background: rgba(255,255,255,.03);
-      font-size: 13px;
+    .message-box {
+      display: none;
+      margin-top: 18px;
+      background: #0b1220;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 16px;
+      padding: 16px;
+      line-height: 1.5;
+      color: #d1d5db;
     }
 
-    .score-wrap {
+    .message-box.show {
+      display: block;
+    }
+
+    .message-box.good {
+      border-color: #34d399;
+      color: #bbf7d0;
+    }
+
+    .message-box.bad {
+      border-color: #f87171;
+      color: #fecaca;
+    }
+
+    .director-box {
+      display: none;
+      margin-top: 18px;
+      background: #450a0a;
+      border: 2px solid #f87171;
+      border-radius: 16px;
+      padding: 16px;
+      line-height: 1.5;
+      color: #fecaca;
+      font-weight: bold;
+    }
+
+    .director-box.show {
+      display: block;
+    }
+
+    .log {
+      margin-top: 18px;
+      background: #020617;
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      max-height: 210px;
+      overflow-y: auto;
+    }
+
+    .log h3 {
+      color: #fde68a;
+      margin-bottom: 8px;
+    }
+
+    .log-entry {
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      padding: 8px 0;
+      color: #cbd5e1;
+      line-height: 1.4;
+      font-size: 14px;
+    }
+
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+
+    .result-grid {
       display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 16px;
-      margin-bottom: 18px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 20px 0;
     }
 
-    .score-box {
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      background: var(--card-2);
+    .result-metric {
+      background: #0b1220;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 16px;
+      padding: 16px;
       text-align: center;
     }
 
-    .score-number {
-      font-size: 2.4rem;
-      font-weight: 800;
-      line-height: 1;
+    .result-metric span {
+      display: block;
+      color: #94a3b8;
       margin-bottom: 8px;
-      letter-spacing: -0.04em;
     }
 
-    .score-label { color: var(--muted); font-size: 14px; }
-
-    .meter {
-      height: 16px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      margin-top: 14px;
+    .result-metric strong {
+      font-size: 30px;
+      color: #fde68a;
     }
 
-    .meter-fill {
-      height: 100%;
-      width: 0;
-      transition: width .35s ease;
-      background: linear-gradient(90deg, var(--accent-2), var(--warn), var(--danger));
+    .final-level {
+      text-align: center;
+      padding: 16px;
+      border-radius: 16px;
+      margin: 16px 0;
+      font-size: 22px;
+      font-weight: bold;
     }
 
-    .section {
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: var(--card-2);
-      padding: 16px 18px;
-      margin-top: 14px;
+    .level-high {
+      background: #064e3b;
+      color: #bbf7d0;
     }
 
-    .section h4 {
-      margin: 0 0 12px;
-      font-size: 0.98rem;
-      letter-spacing: -.01em;
+    .level-low {
+      background: #450a0a;
+      color: #fecaca;
     }
 
-    .section ul {
-      margin: 0;
-      padding-left: 20px;
-      line-height: 1.7;
+    .teacher-note {
+      margin-top: 18px;
+      background: #1f2937;
+      border-radius: 16px;
+      padding: 16px;
+      border-left: 5px solid #93c5fd;
     }
 
-    .section li + li { margin-top: 8px; }
-
-    .fun {
-      white-space: pre-line;
-      line-height: 1.8;
-      color: #f7f5ff;
-      font-size: 1rem;
+    .teacher-note h3 {
+      color: #93c5fd;
+      margin-bottom: 8px;
     }
 
-    .sources a {
-      color: #c4b5fd;
-      text-decoration: none;
-    }
-
-    .sources a:hover { text-decoration: underline; }
-
-    .hidden { display:none !important; }
-
-    .small {
-      color: var(--muted);
-      font-size: 13px;
+    .teacher-note ul {
+      padding-left: 22px;
+      color: #d1d5db;
       line-height: 1.6;
-      margin-top: 12px;
     }
 
-    @media (max-width: 980px) {
-      .grid { grid-template-columns: 1fr; }
-      .score-wrap { grid-template-columns: 1fr; }
+    @media (max-width: 1100px) {
+      .suspects-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .status-bar,
+      .result-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .mission-grid,
+      .status-bar,
+      .result-grid,
+      .suspects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 26px;
+      }
+
+      .screen {
+        padding: 18px;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+
+      .buttons button {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <section class="hero">
-      <div class="badge">🕵️ Tradutor crítico de políticas · inspirado em Shoshana Zuboff</div>
-      <h1>Termos de uso, agora em português sincero</h1>
-      <p class="subtitle">
-        Clique numa plataforma para carregar trechos estáticos baseados em documentos oficiais. Depois o sistema traduz o juridiquês para uma leitura crítica — com humor, mas sem perder o ponto: coleta, perfilização, recomendação, publicidade e modulação de comportamento.
-      </p>
-    </section>
+  <main class="game">
+    <header>
+      <h1>🕵️ Detetive da Aprendizagem</h1>
+      <p>Use poucas pistas, identifique os trapaceiros e evite penalizar inocentes.</p>
+    </header>
 
-    <section class="grid">
+    <section id="introScreen" class="screen">
       <div class="card">
-        <div class="card-head"><h2>Escolha uma plataforma</h2></div>
-        <div class="card-body">
-          <div class="platforms" id="platformButtons"></div>
-          <textarea id="entrada" spellcheck="false"></textarea>
-          <div class="actions">
-            <button class="btn btn-primary" id="translateBtn">Traduzir sem anestesia</button>
-            <button class="btn btn-secondary" id="resetBtn">Limpar</button>
+        <h2>Missão</h2>
+        <p>
+          Você é o professor-detetive. Em cada atividade, alguns alunos trapacearam e outros são inocentes.
+          Use as pistas com cuidado e penalize apenas quando houver evidência suficiente.
+        </p>
+
+        <div class="mission-grid">
+          <div class="mission-item">
+            <strong>Investigue</strong>
+            As pistas são poucas. Elas servem para ensinar a reconhecer indícios fortes.
           </div>
-          
+          <div class="mission-item">
+            <strong>Decida</strong>
+            Penalize somente quem realmente trapaceou. Não há tentativa e erro.
+          </div>
+          <div class="mission-item">
+            <strong>Recomece ao errar</strong>
+            Se penalizar um inocente, a investigação reinicia e os alunos são embaralhados.
+          </div>
         </div>
-      </div>
 
-      <div class="card">
-        <div class="card-head"><h3>Resultado</h3></div>
-        <div class="card-body">
-          <div class="meta-line">
-            <div class="pill" id="platformPill">Nenhuma plataforma carregada</div>
-            <div class="pill" id="statusPill">Aguardando análise</div>
-          </div>
+        <div class="rules">
+          <strong>Regras do jogo:</strong><br>
+          • Existem 8 trapaceiros no total.<br>
+          • Você tem apenas 5 pistas para todo o jogo.<br>
+          • As pistas devem ser usadas para confirmar dúvidas, não para abrir em todos os alunos.<br>
+          • Se penalizar corretamente, avança na investigação.<br>
+          • Se penalizar um aluno inocente, o diretor cancela a investigação e você precisa começar de novo.<br>
+          • Ao reiniciar, os alunos aparecem embaralhados para evitar decorar posições.
+        </div>
 
-          <div class="score-wrap">
-            <div class="score-box">
-              <div class="score-number" id="scoreNumber">0</div>
-              <div class="score-label">índice de vigilância</div>
-            </div>
-            <div class="score-box" style="text-align:left;">
-              <div style="font-weight:700; margin-bottom:8px;">Escala do estrago</div>
-              <div id="riskLabel" style="font-size:1.1rem; font-weight:800;">—</div>
-              <div class="meter"><div class="meter-fill" id="meterFill"></div></div>
-              <div class="small" id="riskText">Carregue um texto para ver a análise.</div>
-            </div>
-          </div>
-
-          <div class="section">
-            <h4>Resumo engraçado, porém infelizmente plausível</h4>
-            <div class="fun" id="funSummary">Selecione uma plataforma e clique em “Traduzir sem anestesia”.</div>
-          </div>
-
-          <div class="section">
-            <h4>O que a plataforma parece estar fazendo</h4>
-            <ul id="findingsList"></ul>
-          </div>
-
-          <div class="section">
-            <h4>Leitura zuboffiana</h4>
-            <ul id="zuboffList"></ul>
-          </div>
-
-          <div class="section sources">
-            <h4>Fontes oficiais usadas na versão estática</h4>
-            <ul id="sourcesList"></ul>
-          </div>
+        <div class="buttons">
+          <button class="primary" onclick="startGame()">Começar investigação</button>
+          <button class="secondary" onclick="showTeacherGuide()">Ver proposta pedagógica</button>
         </div>
       </div>
     </section>
-  </div>
+
+    <section id="guideScreen" class="screen hidden">
+      <div class="panel">
+        <h2>Proposta pedagógica do jogo</h2>
+        <p>
+          O jogo usa uma mecânica de investigação para discutir avaliação, autoria e responsabilidade acadêmica.
+          O objetivo não é ensinar a fraudar, mas treinar o professor a diferenciar indício fraco de evidência mais consistente.
+        </p>
+        <p>
+          Como há poucas pistas e o erro reinicia o jogo, o participante precisa observar padrões: repetição de erros,
+          ausência de autoria, dificuldade de explicar a própria resposta e participação artificial.
+        </p>
+        <div class="teacher-note">
+          <h3>Discussão final sugerida</h3>
+          <ul>
+            <li>Qual pista foi realmente decisiva?</li>
+            <li>Que suspeitas pareciam fortes, mas eram apenas dificuldade de aprendizagem?</li>
+            <li>Como evitar penalizar injustamente um aluno?</li>
+            <li>Como redesenhar atividades para exigir autoria e processo?</li>
+          </ul>
+        </div>
+        <div class="buttons">
+          <button class="secondary" onclick="backToIntro()">Voltar</button>
+          <button class="primary" onclick="startGame()">Começar investigação</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen hidden">
+      <div class="status-bar">
+        <div class="status-box">
+          <span>Atividade</span>
+          <strong id="activityCounter">1/4</strong>
+        </div>
+        <div class="status-box">
+          <span>Trapaceiros encontrados</span>
+          <strong id="foundCounter" class="good">0/8</strong>
+        </div>
+        <div class="status-box">
+          <span>Erros permitidos</span>
+          <strong class="bad">0</strong>
+        </div>
+        <div class="status-box">
+          <span>Pistas disponíveis</span>
+          <strong id="clueCounter">5</strong>
+        </div>
+        <div class="status-box">
+          <span>Rodada</span>
+          <strong id="attemptCounter">1</strong>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="case-header">
+          <h2 id="activityTitle">Atividade</h2>
+          <span class="badge" id="activityBadge">Suspeitos</span>
+        </div>
+
+        <div class="activity-box" id="activityDescription"></div>
+
+        <h3>Alunos suspeitos</h3>
+        <p>Observe o comportamento de cada aluno. Abra uma pista apenas quando precisar confirmar uma suspeita.</p>
+        <div class="suspects-grid" id="suspectsArea"></div>
+
+        <div id="messageBox" class="message-box"></div>
+        <div id="directorBox" class="director-box"></div>
+
+        <div class="buttons">
+          <button class="secondary" onclick="restartGame()">Recomeçar com alunos embaralhados</button>
+          <button class="primary" id="nextActivityButton" onclick="nextActivity()" disabled>Próxima atividade</button>
+        </div>
+
+        <div class="log">
+          <h3>Registro da investigação</h3>
+          <div id="logArea"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen hidden">
+      <div class="result-card">
+        <h2 id="resultTitle">Resultado</h2>
+        <p id="resultDescription"></p>
+
+        <div class="result-grid">
+          <div class="result-metric">
+            <span>Trapaceiros encontrados</span>
+            <strong id="finalFound">0/8</strong>
+          </div>
+          <div class="result-metric">
+            <span>Rodadas usadas</span>
+            <strong id="finalAttempts">1</strong>
+          </div>
+          <div class="result-metric">
+            <span>Pistas usadas</span>
+            <strong id="finalCluesUsed">0</strong>
+          </div>
+          <div class="result-metric">
+            <span>Pistas restantes</span>
+            <strong id="finalCluesLeft">0</strong>
+          </div>
+        </div>
+
+        <div class="final-level" id="finalLevel"></div>
+
+        <div class="teacher-note">
+          <h3>Fechamento pedagógico</h3>
+          <ul>
+            <li>Avaliar exige evidência, não apenas desconfiança.</li>
+            <li>Penalização injusta reinicia o jogo porque prejudicar inocentes é grave.</li>
+            <li>Pistas devem ajudar a interpretar padrões, não substituir o julgamento pedagógico.</li>
+            <li>Atividades com autoria e processo reduzem o espaço para cola.</li>
+          </ul>
+        </div>
+
+        <div class="buttons">
+          <button class="secondary" onclick="backToIntroFromResult()">Voltar ao início</button>
+          <button class="primary" onclick="restartGame()">Jogar novamente embaralhado</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    const plataformas = {
-      google: {
-        nome: "Google",
-        resumo: "Busca, YouTube, anúncios e dados cruzados entre serviços.",
-        texto: `Google Privacy Policy / Privacy & Terms (trechos selecionados)
+    const TOTAL_CLUES = 5;
 
-"We use the information we collect to customize our services for you, including providing recommendations, personalized content, and customized search results."
-
-"Depending on your settings, we may also show you personalized ads based on your interests and activity across Google services."
-
-"We use data for analytics and measurement to understand how our services are used."
-
-"When you visit sites or use apps that use Google’s ad or analytics services, those services may link information about your activity from that site or app with activity from other sites or apps that use our services."
-
-Google cookies / ads / partner sites (trechos selecionados)
-
-"Google uses cookies and similar technologies for advertising purposes, including serving and rendering ads, and personalizing ads."
-
-"Businesses can advertise in Google services as well as on non-Google sites."
-
-"If ad personalization is turned on, Google will use your information to make your ads more useful for you. After you visit a site, you could see an ad on a different site."`,
-        findings: [
-          "Usa dados coletados em vários serviços para personalizar conteúdo, busca e recomendações.",
-          "Associa atividade em sites e apps de terceiros que usam ferramentas de anúncio ou analytics da empresa.",
-          "Usa cookies e identificadores para publicidade, mensuração e personalização de anúncios.",
-          "Permite que visitas em um lugar reapareçam como anúncios em outro. O famoso ‘pensei numa bicicleta e ela apareceu’."
-        ],
-        zuboff: [
-          "Excedente comportamental: não fica só no que você digitou; transforma suas interações em matéria-prima para predição.",
-          "Economia da previsão: os dados são usados para aumentar a chance de clique, permanência e conversão.",
-          "Modulação indireta: em vez de mandar em você com um megafone, reorganiza o ambiente informacional para empurrar certas ações."
-        ],
-        fun: `Google, em versão sincerona:
-
-“Você pesquisou uma coisa, assistiu outra e respirou perto do YouTube. Excelente. Vamos juntar tudo isso, chamar de ‘experiência personalizada’ e usar para adivinhar o que você talvez queira antes mesmo de você lembrar que queria.”
-
-Tradução afetiva: não é perseguição, é só um abraço estatístico de vários serviços ao mesmo tempo.
-
-Piada interna do sistema: “desativou anúncio personalizado?” Sem problema. Ainda sobra contexto, localização geral, tema da página e uma quantidade industrial de sinais dizendo quem você provavelmente é.` ,
-        scoreBase: 88,
-        riskText: "Vigilância muito alta: cruzamento entre serviços, rastreamento em terceiros, personalização e mensuração publicitária em escala.",
-        fontes: [
-          { label: "Google Privacy Policy", url: "https://policies.google.com/privacy?hl=en" },
-          { label: "Google Partner Sites / Ad Personalization", url: "https://policies.google.com/technologies/partner-sites?hl=en-US" },
-          { label: "Google Cookies and Advertising", url: "https://policies.google.com/technologies/cookies?hl=en-US" }
+    const baseActivities = [
+      {
+        title: "Atividade 1: Resumo do artigo",
+        badge: "Textos parecidos",
+        description: "A turma entregou um resumo individual de um artigo. Alguns textos parecem parecidos demais, mas nem todo aluno suspeito trapaceou.",
+        students: [
+          {
+            name: "Ana",
+            avatar: "👩‍🎓",
+            detail: "Texto muito parecido com o de outro colega, usando os mesmos exemplos na mesma ordem.",
+            clue: "A pista confirma frases quase idênticas às de Bruno e os mesmos exemplos na mesma sequência.",
+            cheated: true,
+            reason: "Ana copiou parte do resumo em parceria com Bruno."
+          },
+          {
+            name: "Bruno",
+            avatar: "🧑‍🎓",
+            detail: "Resumo com pequenas trocas de palavras em relação ao texto de uma colega.",
+            clue: "A pista confirma o mesmo parágrafo central de Ana, apenas com sinônimos e inversões simples.",
+            cheated: true,
+            reason: "Bruno reutilizou o texto de Ana com pequenas alterações."
+          },
+          {
+            name: "Carla",
+            avatar: "👩‍💻",
+            detail: "Texto simples, com erros, mas com exemplos próprios da discussão em sala.",
+            clue: "A pista mostra rascunhos progressivos e comentários feitos antes da entrega final.",
+            cheated: false,
+            reason: "Carla demonstrou processo de escrita e autoria própria."
+          },
+          {
+            name: "Diego",
+            avatar: "🧑‍💻",
+            detail: "Entrega curta, feita no último minuto, com análise fraca e pouca profundidade.",
+            clue: "A pista mostra pressa e dificuldade, mas não há semelhança relevante com outros textos.",
+            cheated: false,
+            reason: "Diego fez uma entrega fraca, mas não há evidência de fraude."
+          }
         ]
       },
-      meta: {
-        nome: "Meta (Facebook / Instagram)",
-        resumo: "Personalização do feed, anúncios e inferência a partir de relações e interações.",
-        texto: `Meta Privacy Policy / Privacy Center (trechos selecionados a partir de páginas oficiais)
-
-"We use information we collect to provide a personalized experience to you, including ads."
-
-"Learn how we collect, use and share user data to support Facebook, Instagram, Messenger and more."
-
-"Collecting your information helps us create better experiences on our products, so you can discover more of what interests you."
-
-Meta / Transparency Center (ranking)
-
-"We personalize each Feed ... by using machine learning systems to rank content."
-
-"Personalization is when we use the information we know about you to show you things we think are relevant to you."`,
-        findings: [
-          "Coleta e usa dados para personalizar experiência e anúncios em mais de um produto da empresa.",
-          "Usa sistemas de ranking para decidir o que sobe e o que afunda no feed.",
-          "Trata conexões, interações e sinais de interesse como material para inferência comportamental.",
-          "A promessa é relevância; o efeito colateral pode ser bolha, vício em feed e estímulo ao engajamento a qualquer custo."
-        ],
-        zuboff: [
-          "Aqui a extração não olha só para o clique; olha para a vida social digitalizada como laboratório de predição.",
-          "A personalização do feed é um instrumento de arquitetura comportamental: a plataforma organiza o que tem chance de prender sua atenção.",
-          "O valor econômico não está apenas no conteúdo que você publica, mas no que suas interações revelam sobre desejos, medos e vulnerabilidades."
-        ],
-        fun: `Meta, em modo sincerão corporativo de botequim:
-
-“Você curtiu um post, parou 1,7 segundos num vídeo triste e comentou com um emoji ambíguo. Ótimo. Agora vamos reconstruir sua alma em formato de ranking.”
-
-Tradução sem filtro: o feed não é uma janela para o mundo. É um porteiro com MBA em engajamento escolhendo o que te deixa mais tempo por lá.
-
-Resumo humorístico: você pensa que está navegando. O feed pensa que está te pastoreando.` ,
-        scoreBase: 84,
-        riskText: "Vigilância alta: personalização intensa do feed e dos anúncios com base em interações, conexões e modelos de ranking.",
-        fontes: [
-          { label: "Meta Privacy Policy / Privacy Center", url: "https://privacycenter.instagram.com/policy" },
-          { label: "Meta: information collected about you", url: "https://privacycenter.instagram.com/guide/collection/" },
-          { label: "Meta Transparency: Facebook Feed Ranking", url: "https://transparency.meta.com/features/ranking-and-content/" }
+      {
+        title: "Atividade 2: Lista de exercícios",
+        badge: "Erros repetidos",
+        description: "A lista tinha questões abertas. Alguns alunos repetiram exatamente os mesmos erros, mas outros apenas erraram por dificuldade no conteúdo.",
+        students: [
+          {
+            name: "Eduarda",
+            avatar: "👩‍🔬",
+            detail: "Mesma justificativa errada de outro colega, inclusive com expressão incomum repetida.",
+            clue: "A pista confirma a mesma justificativa incorreta e o mesmo erro de digitação de Felipe.",
+            cheated: true,
+            reason: "Eduarda copiou a justificativa da lista de Felipe."
+          },
+          {
+            name: "Felipe",
+            avatar: "🧑‍🔬",
+            detail: "Arquivo completo demais e com marcas de ter sido usado como base por colegas.",
+            clue: "A pista mostra que o arquivo dele foi compartilhado antes das entregas de Eduarda.",
+            cheated: true,
+            reason: "Felipe compartilhou respostas da lista com colegas."
+          },
+          {
+            name: "Gustavo",
+            avatar: "🧑‍🏫",
+            detail: "Errou muitas questões, mas os caminhos de resolução são diferentes dos demais.",
+            clue: "A pista mostra erros conceituais próprios e tentativa de resolução passo a passo.",
+            cheated: false,
+            reason: "Gustavo teve dificuldade real, mas não há evidência de cópia."
+          },
+          {
+            name: "Helena",
+            avatar: "👩‍🏫",
+            detail: "Pediu ajuda no fórum e entregou uma resolução incompleta, mas coerente com as dúvidas postadas.",
+            clue: "A pista mostra perguntas feitas por ela no fórum e evolução parcial até a resposta final.",
+            cheated: false,
+            reason: "Helena pediu ajuda, mas construiu a própria resposta."
+          }
         ]
       },
-      tiktok: {
-        nome: "TikTok",
-        resumo: "Recomendação agressiva, sinais de interação e relevância por localização.",
-        texto: `TikTok Support / Official explanation of recommendation systems (trechos selecionados)
-
-"We use recommender systems to offer you a personalized experience."
-
-"These systems suggest content based on your preferences as expressed through interactions on TikTok, such as following an account or liking a post."
-
-"Your interactions across TikTok can impact how the system ranks and serves you content."
-
-"The three main factors are user interactions, content information, and user information."
-
-TikTok location settings / official support page (trechos selecionados)
-
-"We use location information ... to provide you with more relevant recommendations."
-
-"Recommend ads that may be relevant to you."`,
-        findings: [
-          "Admite explicitamente o uso de sistemas de recomendação para personalizar o que aparece.",
-          "Baseia ranking em interações, informações do conteúdo e dados do usuário.",
-          "Usa localização para refinar recomendações e anúncios quando disponível.",
-          "Opera com ciclo muito rápido de feedback: cada gesto ajuda o sistema a recalibrar o próximo estímulo."
-        ],
-        zuboff: [
-          "É um caso quase didático de modulação comportamental em tempo real: o sistema aprende vendo sua resposta imediata ao conteúdo.",
-          "A plataforma não apenas prevê interesse; ela testa, ajusta e intensifica estímulos para maximizar retenção.",
-          "No vocabulário de Zuboff, é a fábrica de previsão trabalhando em alta rotação e com esteira rolante de microdecisões."
-        ],
-        fun: `TikTok, traduzido para seres humanos cansados:
-
-“Você ficou olhando esse vídeo por três segundos a mais? Perfeito. O algoritmo acaba de anotar que seu córtex gosta desse tempero.”
-
-Versão engraçada, mas dolorosamente precisa: não é só ‘ver o que você gosta’. É um laboratório com música de fundo testando qual sequência te mantém hipnotizado sem parecer que está hipnotizando.
-
-Em outras palavras: um cassino vertical de bolso com excelente UX.` ,
-        scoreBase: 91,
-        riskText: "Vigilância muito alta: recomendação em tempo real baseada em interações e múltiplos sinais, com forte capacidade de retenção e ajuste fino.",
-        fontes: [
-          { label: "TikTok: How content is recommended", url: "https://support.tiktok.com/en/using-tiktok/exploring-videos/how-tiktok-recommends-content" },
-          { label: "TikTok: Location information and recommendations", url: "https://support.tiktok.com/en/account-and-privacy/account-privacy-settings/location-services-on-tiktok" }
+      {
+        title: "Atividade 3: Fórum de discussão",
+        badge: "Participação artificial",
+        description: "O fórum pedia comentário crítico sobre um texto. Algumas respostas parecem genéricas e não dialogam com a discussão da turma.",
+        students: [
+          {
+            name: "Igor",
+            avatar: "🧑‍🎨",
+            detail: "Texto longo, genérico, sem citar colegas, aula ou trecho específico do material.",
+            clue: "A pista mostra que Igor não conseguiu explicar oralmente os principais argumentos do próprio post.",
+            cheated: true,
+            reason: "Igor usou resposta pronta sem demonstrar compreensão."
+          },
+          {
+            name: "Júlia",
+            avatar: "👩‍🎨",
+            detail: "Postou perto do prazo, mas respondeu diretamente a dois colegas e citou a aula.",
+            clue: "A pista mostra diálogo real com colegas e referência ao debate feito em sala.",
+            cheated: false,
+            reason: "Júlia entregou tarde, mas participou de forma autoral."
+          },
+          {
+            name: "Kaique",
+            avatar: "🧑‍🚀",
+            detail: "Usou termos muito sofisticados, mas sem relação clara com o texto-base.",
+            clue: "A pista mostra resposta genérica, sem relação com o texto-base e sem explicar os termos usados.",
+            cheated: true,
+            reason: "Kaique apresentou participação artificial com autoria não demonstrada."
+          },
+          {
+            name: "Lara",
+            avatar: "👩‍🚀",
+            detail: "Comentário curto, mas conectado a um exemplo pessoal e a uma pergunta do professor.",
+            clue: "A pista mostra participação curta, porém coerente com o texto e com a discussão.",
+            cheated: false,
+            reason: "Lara participou pouco, mas não há evidência de fraude."
+          }
         ]
       },
-      amazon: {
-        nome: "Amazon",
-        resumo: "Histórico de compras, navegação e recomendações voltadas a conversão.",
-        texto: `Amazon Privacy Notice / Customer Service pages (trechos selecionados)
-
-"This Privacy Notice describes how Amazon and its affiliates collect and process your personal information through Amazon products and services."
-
-"We personalize recommendations based on your purchases, owned items, and ratings."
-
-"These suggestions change regularly, reflecting your evolving interests."
-
-Amazon Brazil privacy notice (trecho selecionado)
-
-"Mantemos seu histórico de transações a fim de que você possa consultar suas compras anteriores e repetir os pedidos, se desejar."`,
-        findings: [
-          "Usa compras, itens possuídos, avaliações e histórico para recomendar produtos.",
-          "Mantém histórico transacional e trata isso como infraestrutura permanente da experiência.",
-          "A personalização é menos ‘social’ e mais diretamente orientada à conversão comercial.",
-          "A lógica de vigilância aqui é menos feed e mais funil: observar para vender melhor."
-        ],
-        zuboff: [
-          "A extração comportamental serve para prever e aumentar probabilidade de compra.",
-          "O histórico vira insumo de automação comercial: o sistema aprende padrões de consumo e devolve ofertas calibradas.",
-          "É vigilância mercantil pragmática: menos espetáculo, mais carrinho abandonado ressuscitado."
-        ],
-        fun: `Amazon em português claríssimo:
-
-“Notamos que você comprou uma lâmpada, viu uma cafeteira e avaliou um livro. Excelente. Agora vamos montar uma esteira de sugestões até você sentir que ‘foi coincidência’.”
-
-Humor com nota fiscal: aqui o algoritmo não quer apenas entender você. Quer te acompanhar até o PIX.
-
-É o capitalismo de vigilância de terno e planilha: menos dancinha, mais taxa de conversão.` ,
-        scoreBase: 72,
-        riskText: "Vigilância alta, mas mais orientada a compra e recomendação comercial do que a feed algorítmico contínuo.",
-        fontes: [
-          { label: "Amazon Privacy Notice", url: "https://www.amazon.com/gp/help/customer/display.html?nodeId=GX7NJQ4ZB8MHFRNJ" },
-          { label: "Amazon Recommendations", url: "https://www.amazon.com/gp/help/customer/display.html?nodeId=GE4KRSZ4KAZZB4BV" },
-          { label: "Amazon Brasil Privacy Notice", url: "https://www.amazon.com.br/gp/help/customer/display.html?nodeId=GX7NJQ4ZB8MHFRNJ" }
+      {
+        title: "Atividade 4: Trabalho em grupo",
+        badge: "Autoria desequilibrada",
+        description: "O grupo apresentou um seminário. Alguns integrantes parecem não ter participado de verdade, enquanto outros demonstraram domínio do conteúdo.",
+        students: [
+          {
+            name: "Marcos",
+            avatar: "🧑‍💼",
+            detail: "Respondeu perguntas conceituais e explicou decisões tomadas pelo grupo.",
+            clue: "A pista mostra várias edições de Marcos no documento e domínio do conteúdo durante a arguição.",
+            cheated: false,
+            reason: "Marcos participou e demonstrou autoria."
+          },
+          {
+            name: "Nina",
+            avatar: "👩‍💼",
+            detail: "Leu slides prontos e não conseguiu explicar a parte que apresentou.",
+            clue: "A pista mostra ausência de contribuição no documento e dificuldade para responder perguntas simples.",
+            cheated: true,
+            reason: "Nina recebeu crédito sem demonstrar participação real no trabalho."
+          },
+          {
+            name: "Otávio",
+            avatar: "🧑‍🔧",
+            detail: "Contribuiu mais na organização visual, mas explicou corretamente um conceito.",
+            clue: "A pista mostra contribuições menores, mas reais, incluindo revisão e uma explicação conceitual correta.",
+            cheated: false,
+            reason: "Otávio contribuiu menos, mas participou de forma verificável."
+          },
+          {
+            name: "Paula",
+            avatar: "👩‍🔧",
+            detail: "Não participou das reuniões e apenas leu um trecho enviado pelo grupo.",
+            clue: "A pista mostra que Paula não editou o trabalho, não participou do planejamento e não soube explicar sua parte.",
+            cheated: true,
+            reason: "Paula foi incluída no grupo sem contribuição real."
+          }
         ]
       }
-    };
+    ];
 
-    const platformButtons = document.getElementById('platformButtons');
-    const entrada = document.getElementById('entrada');
-    const platformPill = document.getElementById('platformPill');
-    const statusPill = document.getElementById('statusPill');
-    const scoreNumber = document.getElementById('scoreNumber');
-    const riskLabel = document.getElementById('riskLabel');
-    const riskText = document.getElementById('riskText');
-    const meterFill = document.getElementById('meterFill');
-    const funSummary = document.getElementById('funSummary');
-    const findingsList = document.getElementById('findingsList');
-    const zuboffList = document.getElementById('zuboffList');
-    const sourcesList = document.getElementById('sourcesList');
+    const totalCheaters = baseActivities.reduce((total, activity) => {
+      return total + activity.students.filter(student => student.cheated).length;
+    }, 0);
 
-    let plataformaAtual = null;
+    let gameActivities = [];
+    let currentActivity = 0;
+    let found = 0;
+    let cluesLeft = TOTAL_CLUES;
+    let cluesUsed = 0;
+    let gameOver = false;
+    let decisions = {};
+    let clueOpened = {};
+    let attempt = 1;
 
-    function renderButtons() {
-      platformButtons.innerHTML = Object.entries(plataformas).map(([key, p]) => `
-        <button class="platform-btn" data-key="${key}">
-          <span class="platform-name">${p.nome}</span>
-          <span class="platform-meta">${p.resumo}</span>
-        </button>
-      `).join('');
+    const introScreen = document.getElementById("introScreen");
+    const guideScreen = document.getElementById("guideScreen");
+    const gameScreen = document.getElementById("gameScreen");
+    const resultScreen = document.getElementById("resultScreen");
 
-      platformButtons.querySelectorAll('.platform-btn').forEach(btn => {
-        btn.addEventListener('click', () => carregar(btn.dataset.key));
+    const activityCounter = document.getElementById("activityCounter");
+    const foundCounter = document.getElementById("foundCounter");
+    const clueCounter = document.getElementById("clueCounter");
+    const attemptCounter = document.getElementById("attemptCounter");
+    const activityTitle = document.getElementById("activityTitle");
+    const activityBadge = document.getElementById("activityBadge");
+    const activityDescription = document.getElementById("activityDescription");
+    const suspectsArea = document.getElementById("suspectsArea");
+    const messageBox = document.getElementById("messageBox");
+    const directorBox = document.getElementById("directorBox");
+    const nextActivityButton = document.getElementById("nextActivityButton");
+    const logArea = document.getElementById("logArea");
+
+    function showTeacherGuide() {
+      introScreen.classList.add("hidden");
+      guideScreen.classList.remove("hidden");
+    }
+
+    function backToIntro() {
+      guideScreen.classList.add("hidden");
+      introScreen.classList.remove("hidden");
+    }
+
+    function startGame() {
+      attempt = 1;
+      setupNewRun();
+      introScreen.classList.add("hidden");
+      guideScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      gameScreen.classList.remove("hidden");
+      addLog("Investigação iniciada. As pistas são poucas: use somente quando tiver dúvida real.");
+      renderActivity();
+    }
+
+    function setupNewRun() {
+      gameActivities = shuffleArray(baseActivities).map(activity => {
+        return {
+          ...activity,
+          students: shuffleArray(activity.students)
+        };
+      });
+      currentActivity = 0;
+      found = 0;
+      cluesLeft = TOTAL_CLUES;
+      cluesUsed = 0;
+      gameOver = false;
+      decisions = {};
+      clueOpened = {};
+      logArea.innerHTML = "";
+    }
+
+    function renderActivity() {
+      const activity = gameActivities[currentActivity];
+      activityTitle.textContent = activity.title;
+      activityBadge.textContent = activity.badge;
+      activityDescription.textContent = activity.description;
+      messageBox.className = "message-box";
+      messageBox.textContent = "";
+      directorBox.className = "director-box";
+      directorBox.textContent = "";
+
+      renderSuspects();
+      updateStatus();
+      updateNextButton(false);
+    }
+
+    function renderSuspects() {
+      const activity = gameActivities[currentActivity];
+      suspectsArea.innerHTML = "";
+
+      activity.students.forEach((student, index) => {
+        const key = getStudentKey(currentActivity, student.name);
+        const decision = decisions[key];
+        const clueIsOpen = clueOpened[key];
+
+        const card = document.createElement("div");
+        card.className = "suspect-card";
+
+        if (decision === "correct") card.classList.add("correct");
+        if (decision || gameOver) card.classList.add("locked");
+
+        const clueHtml = clueIsOpen
+          ? `<div class="clue-box"><strong>Pista:</strong><br>${student.clue}</div>`
+          : `<div class="clue-box empty">Pista fechada. Use apenas se precisar confirmar.</div>`;
+
+        let decisionHtml = "";
+        let buttonsHtml = "";
+
+        if (decision === "correct") {
+          decisionHtml = `<div class="decision-label correct">✅ Penalização correta<br>${student.reason}</div>`;
+        } else {
+          buttonsHtml = `
+            <div class="card-buttons">
+              <button class="info" onclick="openClue(${index})" ${clueIsOpen || cluesLeft <= 0 || gameOver ? "disabled" : ""}>Abrir pista</button>
+              <button class="danger" onclick="penalizeStudent(${index})" ${gameOver ? "disabled" : ""}>Penalizar aluno</button>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="student-top">
+            <div class="avatar">${student.avatar}</div>
+            <div>
+              <div class="student-name">${student.name}</div>
+              <div class="student-detail">Suspeito(a)</div>
+            </div>
+          </div>
+          <div class="student-detail">${student.detail}</div>
+          ${clueHtml}
+          ${decisionHtml}
+          ${buttonsHtml}
+        `;
+
+        suspectsArea.appendChild(card);
       });
     }
 
-    function carregar(key) {
-      plataformaAtual = key;
-      const p = plataformas[key];
-      entrada.style.display = 'block';
-      entrada.value = p.texto;
-      platformPill.textContent = `Plataforma: ${p.nome}`;
-      statusPill.textContent = 'Pronto para analisar';
-      document.querySelectorAll('.platform-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.key === key);
-      });
-      traduzir();
+    function getStudentKey(activityIndex, studentName) {
+      return `${activityIndex}-${studentName}`;
     }
 
-    function classify(score) {
-      if (score >= 86) return { label: '🔴 Zona vermelha', text: 'a plataforma não quer só te servir; quer aprender a te conduzir' };
-      if (score >= 70) return { label: '🟠 Zona laranja', text: 'a coleta é pesada e a personalização tem claro valor econômico' };
-      if (score >= 50) return { label: '🟡 Zona amarela', text: 'há vigilância relevante, mas com escopo mais focado' };
-      return { label: '🟢 Zona verde', text: 'relaxe, é pegadinha: quase ninguém nessa amostra cai aqui' };
+    function openClue(studentIndex) {
+      if (gameOver || cluesLeft <= 0) return;
+
+      const student = gameActivities[currentActivity].students[studentIndex];
+      const key = getStudentKey(currentActivity, student.name);
+      if (clueOpened[key]) return;
+
+      clueOpened[key] = true;
+      cluesLeft--;
+      cluesUsed++;
+
+      addLog(`Pista aberta sobre ${student.name}.`);
+      showMessage(`Pista aberta sobre ${student.name}. Agora decida se ela confirma ou enfraquece a suspeita.`, "good");
+      renderSuspects();
+      updateStatus();
     }
 
-    function traduzir() {
-      const texto = entrada.value.trim().toLowerCase();
-      if (!texto) {
-        statusPill.textContent = 'Sem texto para analisar';
-        scoreNumber.textContent = '0';
-        riskLabel.textContent = '—';
-        riskText.textContent = 'Cole ou carregue um texto.';
-        meterFill.style.width = '0%';
-        funSummary.textContent = 'Nada para traduzir ainda.';
-        findingsList.innerHTML = '';
-        zuboffList.innerHTML = '';
-        sourcesList.innerHTML = '';
-        return;
-      }
+    function penalizeStudent(studentIndex) {
+      if (gameOver) return;
 
-      const p = plataformaAtual ? plataformas[plataformaAtual] : null;
-      let score = p ? p.scoreBase : 40;
+      const activity = gameActivities[currentActivity];
+      const student = activity.students[studentIndex];
+      const key = getStudentKey(currentActivity, student.name);
 
-      const heuristicas = [
-        { keys: ['personalized ads', 'personalize', 'personalized', 'ads'], pts: 5 },
-        { keys: ['recommend', 'recommendations', 'rank', 'ranking'], pts: 5 },
-        { keys: ['cookies', 'analytics', 'measure'], pts: 4 },
-        { keys: ['activity across', 'other sites', 'third-party', 'third party'], pts: 6 },
-        { keys: ['location'], pts: 4 },
-        { keys: ['share'], pts: 3 },
-        { keys: ['interactions', 'preferences'], pts: 3 }
-      ];
+      if (decisions[key]) return;
 
-      heuristicas.forEach(h => {
-        if (h.keys.some(k => texto.includes(k))) score += h.pts;
-      });
-
-      score = Math.min(99, score);
-      const c = classify(score);
-
-      scoreNumber.textContent = score;
-      riskLabel.textContent = c.label;
-      riskText.textContent = p ? p.riskText : c.text;
-      meterFill.style.width = `${score}%`;
-      statusPill.textContent = 'Análise concluída';
-
-      if (p) {
-        funSummary.textContent = p.fun;
-        findingsList.innerHTML = p.findings.map(item => `<li>${item}</li>`).join('');
-        zuboffList.innerHTML = p.zuboff.map(item => `<li>${item}</li>`).join('');
-        sourcesList.innerHTML = p.fontes.map(f => `<li><a href="${f.url}" target="_blank" rel="noopener noreferrer">${f.label}</a></li>`).join('');
+      if (student.cheated) {
+        decisions[key] = "correct";
+        found++;
+        showMessage(`Acerto: ${student.name} realmente trapaceou.`, "good");
+        addLog(`✅ ${student.name} penalizado corretamente. ${student.reason}`);
+        renderSuspects();
+        updateStatus();
+        updateNextButton(true);
+        checkWin();
       } else {
-        funSummary.textContent = 'O sistema detectou sinais de personalização e rastreamento. Em bom português: tem algoritmo olhando para você com interesse financeiro.';
-        findingsList.innerHTML = '<li>Há indícios de coleta, personalização e mensuração.</li>';
-        zuboffList.innerHTML = '<li>O texto sugere transformação de comportamento em ativo econômico.</li>';
-        sourcesList.innerHTML = '<li>Sem fonte estática associada: texto manual.</li>';
+        addLog(`❌ ${student.name} era inocente. O diretor cancelou a investigação.`);
+        failAndForceRestart(student);
       }
     }
 
-    document.getElementById('translateBtn').addEventListener('click', traduzir);
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      plataformaAtual = null;
-      entrada.value = '';
-      entrada.style.display = 'none';
-      platformPill.textContent = 'Nenhuma plataforma carregada';
-      statusPill.textContent = 'Aguardando clique';
-      document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
-      traduzir();
-    });
+    function failAndForceRestart(student) {
+      gameOver = true;
+      renderSuspects();
+      updateStatus();
 
-    renderButtons();
+      messageBox.textContent = `Erro: ${student.name} foi penalizado injustamente.`;
+      messageBox.className = "message-box show bad";
+      directorBox.innerHTML = `Diretor: você penalizou ${student.name} sem evidência suficiente. A investigação será reiniciada com os alunos embaralhados. <br><br><button class="primary" onclick="restartGame()">Recomeçar investigação</button>`;
+      directorBox.classList.add("show");
+      nextActivityButton.disabled = true;
+    }
+
+    function showMessage(text, type) {
+      messageBox.textContent = text;
+      messageBox.className = `message-box show ${type}`;
+    }
+
+    function addLog(text) {
+      const entry = document.createElement("div");
+      entry.className = "log-entry";
+      entry.textContent = text;
+      logArea.prepend(entry);
+    }
+
+    function updateStatus() {
+      activityCounter.textContent = `${currentActivity + 1}/${gameActivities.length}`;
+      foundCounter.textContent = `${found}/${totalCheaters}`;
+      clueCounter.textContent = cluesLeft;
+      attemptCounter.textContent = attempt;
+    }
+
+    function updateNextButton(showCompleteMessage) {
+      const cheatersLeftInActivity = gameActivities[currentActivity].students.some((student) => {
+        const key = getStudentKey(currentActivity, student.name);
+        return student.cheated && decisions[key] !== "correct";
+      });
+
+      nextActivityButton.disabled = cheatersLeftInActivity || currentActivity >= gameActivities.length - 1 || gameOver;
+
+      if (!cheatersLeftInActivity && currentActivity < gameActivities.length - 1 && !gameOver && showCompleteMessage) {
+        showMessage("Todos os trapaceiros desta atividade foram encontrados. Você pode avançar.", "good");
+      }
+    }
+
+    function nextActivity() {
+      if (gameOver) return;
+      if (currentActivity < gameActivities.length - 1) {
+        currentActivity++;
+        addLog(`Nova atividade aberta: ${gameActivities[currentActivity].title}.`);
+        renderActivity();
+      }
+    }
+
+    function checkWin() {
+      if (found === totalCheaters) {
+        endGame(true);
+      }
+    }
+
+    function endGame(won) {
+      gameOver = true;
+      gameScreen.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+
+      document.getElementById("finalFound").textContent = `${found}/${totalCheaters}`;
+      document.getElementById("finalAttempts").textContent = attempt;
+      document.getElementById("finalCluesUsed").textContent = cluesUsed;
+      document.getElementById("finalCluesLeft").textContent = cluesLeft;
+
+      const resultTitle = document.getElementById("resultTitle");
+      const resultDescription = document.getElementById("resultDescription");
+      const finalLevel = document.getElementById("finalLevel");
+      finalLevel.className = "final-level";
+
+      if (won) {
+        resultTitle.textContent = "Vitória: investigação concluída";
+        resultDescription.textContent = "Você encontrou todos os alunos que trapacearam sem penalizar nenhum inocente.";
+        finalLevel.textContent = "Professor-detetive aprovado pelo diretor";
+        finalLevel.classList.add("level-high");
+      } else {
+        resultTitle.textContent = "Investigação reiniciada";
+        resultDescription.textContent = "Um aluno inocente foi penalizado. O jogo deve ser recomeçado com nova ordem de alunos.";
+        finalLevel.textContent = "Penalização injusta detectada";
+        finalLevel.classList.add("level-low");
+      }
+    }
+
+    function restartGame() {
+      attempt++;
+      setupNewRun();
+      introScreen.classList.add("hidden");
+      guideScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      gameScreen.classList.remove("hidden");
+      addLog("Nova tentativa iniciada. Os alunos foram embaralhados.");
+      renderActivity();
+    }
+
+    function backToIntroFromResult() {
+      resultScreen.classList.add("hidden");
+      gameScreen.classList.add("hidden");
+      guideScreen.classList.add("hidden");
+      introScreen.classList.remove("hidden");
+    }
+
+    function shuffleArray(array) {
+      const copy = array.map(item => {
+        if (item && typeof item === "object" && !Array.isArray(item)) {
+          return { ...item };
+        }
+        return item;
+      });
+
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+
+      return copy;
+    }
   </script>
 </body>
 </html>
